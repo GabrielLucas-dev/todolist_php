@@ -1,0 +1,96 @@
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: "Open Sans", sans-serif;
+    color: #ebebeb;
+}
+body{
+    background-color: #303030;
+}
+
+.container-main{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.inner-container{
+    width: 480px;
+    min-height: 240px;
+    
+}
+.main-title{
+    text-align: center;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+.form-actions{
+    margin-top: 8px;
+}
+.form-actions input{
+    width: 78%;
+    padding: 2px;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #fff;
+}
+.form-actions button{
+    color:#fff;
+    width: 21%;
+    padding: 3px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    background-color: #fff;
+    background-color: rgb(10, 118, 12);
+}
+.form-actions button:hover{
+    background-color: rgb(6, 84, 7);
+    color: #fff;
+    transition: .2s ease;
+}
+
+.container-tasks{
+    width: 100%;
+    height: auto;
+    margin-top: 20px;
+    position: relative;
+}
+.task{
+    display: flex;
+    justify-content: space-between;
+    margin: 12px 0;
+}
+.task-title{
+    display: flex;
+}
+.task-title p{
+    margin-left: 4px;
+}
+.task button{
+    padding: 2px 10px;
+    color: #fff;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+}
+.remove{
+    background-color: rgb(184, 32, 32);
+}
+.remove:hover{
+    background-color: rgb(142, 13, 13);
+    transition: .2s ease;
+}
+
+.edit{
+    background-color: rgb(66, 81, 193);
+}
+.edit:hover{
+    background-color: rgb(40, 59, 205);
+    transition: .2s ease;
+}
+
