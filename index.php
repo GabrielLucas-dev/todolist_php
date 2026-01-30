@@ -5,8 +5,57 @@ $sql_select = "SELECT * FROM tasks";
 $result = mysqli_query($conn, $sql_select);
 
 // var_dump($values);
-
 ?>
+
+<!-- --------------------------------------------------- -->
+
+<!-- BLOCO ADICIONAR TAREFA -->
+<?php
+if (isset($_POST['add_btn'])) {
+    $titulo = $_POST['titulo'];
+
+    $sql_insert = "INSERT INTO tasks (titulo) 
+                    VALUES ('$titulo')";
+
+    try {
+        if (!empty($_POST['titulo'])) {       //não se pode validar o campo pela variavel que recebe o valor do input e sim pelo propio 'name' do input
+            mysqli_query($conn, $sql_insert);
+        } else {
+            echo 'atividade não preenchida (reload da pagina)';
+        }
+    } catch (mysqli_sql_exception $e) {
+        echo $e->getMessage();
+        // echo '<script>alert("Erro ao adicionar atividade")</script>';
+    }
+
+    header("Location: index.php");
+    exit;
+    // mysqli_close($conn);
+}
+?>
+
+<!-- --------------------------------------------------- -->
+
+<!-- BLOCO DELETAR TAREFA -->
+<?php
+if (isset($_POST['remove_btn'])) {
+    $id_delete = $_POST['id'];
+
+    try {
+        $sql_delete = "DELETE FROM tasks WHERE id = '$id_delete'";
+        mysqli_query($conn, $sql_delete);
+        echo "<script>window.location.realod();</script>";
+    } catch (mysqli_sql_exception $e) {
+        $e->getMessage();
+        echo "ERRO???";
+    }
+
+    // exit;                      
+}
+?>
+
+<!-- --------------------------------------------------- -->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,21 +85,28 @@ $result = mysqli_query($conn, $sql_select);
 
             <div class="container-tasks">
 
-            <!-- funciona como o map do JS/Node -->
-            <?php if(mysqli_num_rows($result) > 0) : ?>
-                <?php while($row = (mysqli_fetch_assoc($result))) : ?>
-                    <div class="task">
-                        <div class="task-title">
-                            <input type="checkbox" id="checkbox" onclick="handleCheckbox()">
-                            <p id="task_title"> <?= $row['titulo'] ?>  </p>
+                <!-- funciona como o map do JS/Node -->
+                <?php if (mysqli_num_rows($result) > 0) : ?>
+                    <?php while ($row = (mysqli_fetch_assoc($result))) : ?>
+
+                        <div class="task">
+                            <div class="task-title">
+                                <input type="checkbox" id="checkbox" onclick="handleCheckbox()">
+                                <p id="task_title"> <?php echo $row['titulo'] ?> </p>
+                            </div>
+                            <form action="index.php" method="post">
+                                <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                                <button class="remove" type="submit" name="remove_btn">
+                                    Remover
+                                </button>
+                                <button class="edit" name="edit_btn">
+                                    Editar
+                                </button>
+                            </form>
                         </div>
-                        <form action="index.php" method="post">
-                            <button class="remove" name="remove_btn">Remover</button>
-                            <button class="edit" name="edit_btn">Editar</button>
-                        </form>
-                    </div>   
-                <?php endwhile ?>    
-            <?php endif ?>
+
+                    <?php endwhile ?>
+                <?php endif ?>
 
             </div>
 
@@ -58,46 +114,5 @@ $result = mysqli_query($conn, $sql_select);
     </section>
     <script src="scripts.js"></script>
 </body>
+
 </html>
-
-
-<?php
-//BLOCO ADICIONAR ATIVIDADE
-if (isset($_POST['add_btn'])) {
-    $titulo = $_POST['titulo'];
-
-    $sql_insert = "INSERT INTO tasks (titulo) 
-                    VALUES ('$titulo')";
-
-    try {
-        if (!empty($_POST['titulo'])) {       //não se pode validar o campo pela variavel que recebe o valor do input e sim pelo propio 'name' do input
-            mysqli_query($conn, $sql_insert);
-            echo '<script>alert("Atividade adicionada!")</script>';
-        } else {
-            echo 'atividade não preenchida (reload da pagina)';
-        }
-    } catch (mysqli_sql_exception $e) {
-        echo "erro safado <br>";
-        echo $e->getMessage();
-        // echo '<script>alert("Erro ao adicionar atividade")</script>';
-    }
-}
-
-mysqli_close($conn);
-?>
-
-<?php
-
-if (isset($_POST['remove_btn'])) {
-    $sql_delete = "DELETE FROM tasks WHERE id = ";
-
-    try {
-        mysqli_query($conn, $sql_delete);
-        echo '<script>alert("Atividade removida!")</script>';
-    } catch (mysqli_sql_exception $e) {
-        echo $e->getMessage();
-    }
-
-    mysqli_close($conn);
-}
-?>

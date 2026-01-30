@@ -64,9 +64,11 @@ body{
     display: flex;
     justify-content: space-between;
     margin: 12px 0;
+    border: 1px solid red;
 }
 .task-title{
     display: flex;
+    color: red;
 }
 .task-title p{
     margin-left: 4px;
