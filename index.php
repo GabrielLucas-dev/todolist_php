@@ -31,7 +31,7 @@ $result = mysqli_query($conn, $sql_select);
     <section class="container-main">
         <div class="inner-container">
             <div class="main-title">
-                <h2>Vamo querer...</h2>
+                <h2>Adicionar tarefa</h2>
             </div>
             <form class="form-actions" action="index.php" method="post">
                 <input type="text" name="titulo" placeholder="tarefa a ser adicionada..." required>
