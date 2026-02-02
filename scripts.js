@@ -1,15 +1,26 @@
-const checkbox = document.getElementById('checkbox')
-const taskTitle = document.getElementById('task_title')
+// let id_php = checkbox.getAttribute('data-id')
 
-let checkboxValue = false
+function handleCheckbox(checkbox){
+    
+    const task = checkbox.closest('.task')
+    const taskTitle = task.querySelector('.task_title')
 
-function handleCheckbox(){
-    if(checkboxValue == false){
-        checkboxValue = true
+    if(checkbox.checked){
         taskTitle.style.textDecoration = "line-through"
-    } else {
-        checkboxValue = false
+    } else{
         taskTitle.style.textDecoration = "none"
     }
+
+    // console.log(checkbox.dataset.id)
+}
+
+// const editBtn = document.getElementById('edit')
+// const editInput = document.querySelector('.hidden')
+
+function handlePut(editBtn){
+    const task = editBtn.closest('.task')
+    const editInput = task.querySelector('.edit_input')
+    
+    editInput.classList.toggle('hidden')
 }
 

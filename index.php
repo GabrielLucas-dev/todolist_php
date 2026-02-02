@@ -1,5 +1,8 @@
 <?php
 include('./database/connect.php');
+include('./actions/insert.php');
+include('./actions/delete.php');
+include('./actions/put.php');
 
 $sql_select = "SELECT * FROM tasks";
 $result = mysqli_query($conn, $sql_select);
@@ -7,54 +10,6 @@ $result = mysqli_query($conn, $sql_select);
 // var_dump($values);
 ?>
 
-<!-- --------------------------------------------------- -->
-
-<!-- BLOCO ADICIONAR TAREFA -->
-<?php
-if (isset($_POST['add_btn'])) {
-    $titulo = $_POST['titulo'];
-
-    $sql_insert = "INSERT INTO tasks (titulo) 
-                    VALUES ('$titulo')";
-
-    try {
-        if (!empty($_POST['titulo'])) {       //não se pode validar o campo pela variavel que recebe o valor do input e sim pelo propio 'name' do input
-            mysqli_query($conn, $sql_insert);
-        } else {
-            echo 'atividade não preenchida (reload da pagina)';
-        }
-    } catch (mysqli_sql_exception $e) {
-        echo $e->getMessage();
-        // echo '<script>alert("Erro ao adicionar atividade")</script>';
-    }
-
-    header("Location: index.php");
-    exit;
-    // mysqli_close($conn);
-}
-?>
-
-<!-- --------------------------------------------------- -->
-
-<!-- BLOCO DELETAR TAREFA -->
-<?php
-if (isset($_POST['remove_btn'])) {
-    $id_delete = $_POST['id'];
-
-    try {
-        $sql_delete = "DELETE FROM tasks WHERE id = '$id_delete'";
-        mysqli_query($conn, $sql_delete);
-        echo "<script>window.location.realod();</script>";
-    } catch (mysqli_sql_exception $e) {
-        $e->getMessage();
-        echo "ERRO???";
-    }
-
-    // exit;                      
-}
-?>
-
-<!-- --------------------------------------------------- -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -80,7 +35,7 @@ if (isset($_POST['remove_btn'])) {
             </div>
             <form class="form-actions" action="index.php" method="post">
                 <input type="text" name="titulo" placeholder="tarefa a ser adicionada..." required>
-                <button type="submit" name="add_btn">adicionar</button>
+                <button type="submit" name="add_btn">Adicionar</button>
             </form>
 
             <div class="container-tasks">
@@ -90,29 +45,46 @@ if (isset($_POST['remove_btn'])) {
                     <?php while ($row = (mysqli_fetch_assoc($result))) : ?>
 
                         <div class="task">
-                            <div class="task-title">
-                                <input type="checkbox" id="checkbox" onclick="handleCheckbox()">
-                                <p id="task_title"> <?php echo $row['titulo'] ?> </p>
+                            <div class="layout-tasks">
+                                <div class="task-title">
+                                    <form action="./actions/insert.php" method="post">
+                                        <input type="checkbox" name="checkbox_input" id="checkbox" data-id="<?= $row['id'] ?>" onchange="handleCheckbox(this)">
+                                    </form>
+                                    <p class="task_title"> <?php echo $row['titulo'] ?> </p>
+                                </div>
+
+                                <form action="index.php" method="post">
+                                    <input type="hidden" name="id_delete" value="<?= $row['id'] ?>">
+                                    <button class="remove" type="submit" name="remove_btn">
+                                        Remover
+                                    </button>
+                                    <input type="hidden" name="id_put" value="<?= $row['id'] ?>">
+                                    <a class="edit" name="edit_btn" data-id="<?= $row['id'] ?>" onclick="handlePut(this)">
+                                        Editar
+                                    </a>
+                                </form>
                             </div>
-                            <form action="index.php" method="post">
-                                <input type="hidden" name="id" value="<?= $row['id'] ?>">
-                                <button class="remove" type="submit" name="remove_btn">
-                                    Remover
-                                </button>
-                                <button class="edit" name="edit_btn">
-                                    Editar
-                                </button>
-                            </form>
+
+                            <div class=" edit_input hidden">
+                                <form action="index.php" method="post">
+                                    <input type="hidden" name="id_put" value="<?= $row['id'] ?>">
+                                    <input type="text" class="novo-titulo" name="novo_titulo" placeholder="novo titulo..." value=" <?= $row['titulo'] ?>" required>
+                                    <button type="submit" class="alter" name="alter_btn">Alterar</button>
+                                </form>
+                            </div>
+
                         </div>
 
                     <?php endwhile ?>
                 <?php endif ?>
 
             </div>
-
         </div>
     </section>
     <script src="scripts.js"></script>
 </body>
 
 </html>
+
+<!-- ARRUMAR O JS DO BOTAO "EDITAR" -->
+<!-- FAZER O FORM "HIDDEN" FUNCIONAR -->
